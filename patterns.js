@@ -165,10 +165,10 @@ const generateEmptyRectangle = function(height, width) {
 
   const hollowRectangleRow = generateHollowRectangleRow(width);
   for (let line = 2; line < height; line++) {
-    lines[line] = hollowRectangleRow;
+    lines[line - 1] = hollowRectangleRow;
   }
   
-  return join(lines, "\n");
+  return lines;
 }
 
 /* -------------------- REQUIREMENT 2 -------------------- */ 
@@ -264,8 +264,8 @@ const testRectangle = function() {
 }
 
 const testHollowRectangle = function() {
-  assertTest("hollowTriangle", generateEmptyRectangle(3, 3), ["***", "* *", "***"], "empty rectangle of 3X3")
-  assertTest("hollowTriangle", generateEmptyRectangle(2, 2), ["*"], "empty rectangle of 1X1 should be rectangle of 2X2")
+  assertTestOnArray("hollowTriangle", generateEmptyRectangle(3, 3), ["***", "* *", "***"], "empty rectangle of 3X3")
+  assertTestOnArray("hollowTriangle", generateEmptyRectangle(2, 2), ["**", "**"], "empty rectangle of 1X1 should be rectangle of 2X2")
 }
 
 // not refactored
