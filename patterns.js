@@ -134,6 +134,7 @@ const assertTest = function(fnName, actual, expected, message) {
 }
 
 /* -------------------- END OF TEST -------------------- */
+
 // Common
 const render = function(patternLines) {
   console.log(join(patternLines, "\n"));
@@ -154,24 +155,17 @@ const generateRectangle = function(height, width) {
   return lines;
 }
 
-/* -------------------- REQUIREMENT 2 -------------------- */ 
-const repeat = function(pattern, times, seperator) {
-  if (times <= 0) return [];
-  if (times === 1) return pattern;
-  
-  return pattern.concat(seperator.concat(repeat(pattern, times-1, seperator)));
-}
-
-const getEmptyRectangleRow = function(rowNo, height, width) {
-  const isInBorder = rowNo === 1 || rowNo === height  
-  return "*" + repeat(" *"[isInBorder + 0], width - 2) + "*";
+// Hollow Rectangle
+const generateHollowRectangleRow = function(length) {
+  return "*" + " ".repeat(length - 2) + "*";
 }
 
 const generateEmptyRectangle = function(height, width) {
-  let lines = [];
+  let lines = generateRectangle(height, width);
 
-  for (let line = 1; line <= height; line++) {
-    lines.push(getEmptyRectangleRow(line, height, width));
+  const hollowRectangleRow = generateHollowRectangleRow(width);
+  for (let line = 2; line < height; line++) {
+    lines[line] = hollowRectangleRow;
   }
   
   return join(lines, "\n");
@@ -269,6 +263,12 @@ const testRectangle = function() {
   assertTestOnArray("rectangle", generateRectangle(0, 0), [], "rectangle of 0X0 should be empty array"); 
 }
 
+const testHollowRectangle = function() {
+  assertTest("hollowTriangle", generateEmptyRectangle(3, 3), ["***", "* *", "***"], "empty rectangle of 3X3")
+  assertTest("hollowTriangle", generateEmptyRectangle(2, 2), ["*"], "empty rectangle of 1X1 should be rectangle of 2X2")
+}
+
+// not refactored
 const testTriangle = function() {
   assertTest("leftTriangel", generateTriangle(3), "*\n**\n***", "triangle of 3"); 
   assertTest("leftTriangel", generateTriangle(1), "*", "triangle of 1"); 
@@ -293,12 +293,6 @@ const testRepeatativeRectangle = function() {
   assertTest("repeatativeRectangle", generateRepeatativeRectangle(0, 0, 0), "", "repeatative rectangles of 0X0X0");
 }
 
-const testEmptyRectangle = function() {
-  assertTest("hollowTriangle", generateEmptyRectangle(3, 3), "***\n* *\n***", "empty rectangle of 3X3")
-  assertTest("hollowTriangle", generateEmptyRectangle(1, 1), "*", "empty rectangle of 1X1")
-  assertTest("hollowTriangle", generateEmptyRectangle(0, 0), "", "empty rectangle of 0X0")
-}
-
 const testAlternateRectangle = function() {
   assertTest("anternateRectangle", generateAlternateRectangle(3, 4), "****\n----\n****", "alternate rectangle of 3X4")
   assertTest("anternateRectangle", generateAlternateRectangle(1, 1), "*", "alternate rectangle of 1X1")
@@ -307,7 +301,7 @@ const testAlternateRectangle = function() {
 
 const testAll = function() {
   testRectangle();
-//  testEmptyRectangle();
+  testHollowRectangle();
 //  testAlternateRectangle();
 //  testRepeatativeRectangle();
 //  testTriangle();
