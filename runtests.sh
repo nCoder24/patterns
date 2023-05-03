@@ -1,4 +1,4 @@
-for FILE in $(ls test)
+for FILE in $(ls tests)
 do
-  node "test/$FILE"
+  node "tests/$FILE"
 done
